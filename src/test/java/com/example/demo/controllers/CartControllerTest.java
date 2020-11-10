@@ -4,37 +4,45 @@ import com.example.demo.TestUtils;
 import com.example.demo.model.persistence.Cart;
 import com.example.demo.model.persistence.Item;
 import com.example.demo.model.persistence.User;
-import com.example.demo.model.persistence.UserOrder;
-import com.example.demo.model.persistence.repositories.OrderRepository;
+import com.example.demo.model.persistence.repositories.CartRepository;
+import com.example.demo.model.persistence.repositories.ItemRepository;
 import com.example.demo.model.persistence.repositories.UserRepository;
+import com.example.demo.model.requests.ModifyCartRequest;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.ResponseEntity;
 
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class OrderControllerTest {
-    private OrderController orderController;
+public class CartControllerTest {
+    private CartController cartController;
     private UserRepository userRepository = mock(UserRepository.class);
-    private OrderRepository orderRepository = mock(OrderRepository.class);
+    private CartRepository cartRepository = mock(CartRepository.class);
+    private ItemRepository itemRepository = mock(ItemRepository.class);
 
     @Before
     public void setup() {
-        orderController = new OrderController();
-        TestUtils.injectObjects(orderController, "userRepository", userRepository);
-        TestUtils.injectObjects(orderController, "orderRepository", orderRepository);
+        cartController = new CartController();
+        TestUtils.injectObjects(cartController, "userRepository", userRepository);
+        TestUtils.injectObjects(cartController, "cartRepository", cartRepository);
+        TestUtils.injectObjects(cartController, "itemRepository", itemRepository);
     }
 
     @Test
-    public void submit() {
+    public void addToCart() {
+        ModifyCartRequest modifyCartRequest = new ModifyCartRequest();
+        modifyCartRequest.setItemId(2L);
+        modifyCartRequest.setUsername("test");
+        modifyCartRequest.setQuantity(1);
+
         User user = new User();
         user.setUsername("test");
         user.setPassword("testPassword");
@@ -56,28 +64,25 @@ public class OrderControllerTest {
 
         user.setCart(cart);
 
-        UserOrder order = new UserOrder();
-        order.setId(4L);
-        order.setUser(user);
-        order.setItems(listItems);
-        order.setTotal(BigDecimal.ONE);
-
         when(userRepository.findByUsername("test")).thenReturn(user);
-        when(UserOrder.createFromCart(cart)).thenReturn(order);
-        when(orderRepository.save(order)).thenReturn(order);
+        when(itemRepository.findById(2L)).thenReturn(Optional.of(item));
 
-        ResponseEntity<UserOrder> response = orderController.submit("test");
+        ResponseEntity<Cart> response = cartController.addTocart(modifyCartRequest);
         assertNotNull(response);
         assertEquals(200, response.getStatusCodeValue());
 
-        UserOrder result = response.getBody();
-        assertEquals(user, result.getUser());
+        Cart result = response.getBody();
         assertEquals(listItems, result.getItems());
-        assertEquals(BigDecimal.ONE, result.getTotal());
+        assertEquals(BigDecimal.valueOf(2), result.getTotal());
     }
 
     @Test
-    public void getOrdersForUser() {
+    public void removeToCart() {
+        ModifyCartRequest modifyCartRequest = new ModifyCartRequest();
+        modifyCartRequest.setItemId(2L);
+        modifyCartRequest.setUsername("test");
+        modifyCartRequest.setQuantity(1);
+
         User user = new User();
         user.setUsername("test");
         user.setPassword("testPassword");
@@ -91,25 +96,23 @@ public class OrderControllerTest {
         List<Item> listItems = new ArrayList<>();
         listItems.add(item);
 
-        UserOrder order = new UserOrder();
-        order.setId(4L);
-        order.setUser(user);
-        order.setItems(listItems);
-        order.setTotal(BigDecimal.ONE);
-        List<UserOrder> listOrders = new ArrayList<>();
-        listOrders.add(order);
+        Cart cart = new Cart();
+        cart.setId(3L);
+        cart.setItems(listItems);
+        cart.setTotal(BigDecimal.ONE);
+        cart.setUser(user);
+
+        user.setCart(cart);
 
         when(userRepository.findByUsername("test")).thenReturn(user);
-        when(orderRepository.findByUser(user)).thenReturn(listOrders);
+        when(itemRepository.findById(2L)).thenReturn(Optional.of(item));
 
-        ResponseEntity<List<UserOrder>> response = orderController.getOrdersForUser("test");
+        ResponseEntity<Cart> response = cartController.removeFromcart(modifyCartRequest);
         assertNotNull(response);
         assertEquals(200, response.getStatusCodeValue());
 
-        List<UserOrder> result = response.getBody();
-        UserOrder resultOrder = result.get(0);
-        assertEquals(user, resultOrder.getUser());
-        assertEquals(listItems, resultOrder.getItems());
-
+        Cart result = response.getBody();
+        assertEquals(listItems, result.getItems());
+        assertEquals(BigDecimal.valueOf(0), result.getTotal());
     }
 }
