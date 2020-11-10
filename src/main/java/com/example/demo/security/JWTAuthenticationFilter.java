@@ -18,13 +18,10 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
-import static com.example.demo.security.SecurityConstants.EXPIRATION_TIME;
-import static com.example.demo.security.SecurityConstants.HEADER_STRING;
-import static com.example.demo.security.SecurityConstants.SECRET;
-import static com.example.demo.security.SecurityConstants.TOKEN_PREFIX;
+import static com.example.demo.security.SecurityConstants.*;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;

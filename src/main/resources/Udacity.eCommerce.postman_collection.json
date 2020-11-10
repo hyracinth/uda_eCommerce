@@ -1,95 +1,95 @@
 {
-	"variables": [],
-	"info": {
-		"name": "Udacity.eCommerce",
-		"_postman_id": "0161f788-f45a-9c73-4f4c-427b01a5a054",
-		"description": "",
-		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
-	},
-	"item": [
-		{
-			"name": "Create User",
-			"request": {
-				"url": "http://localhost:8080/api/user/create",
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"description": ""
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\"username\":\"test\"\n}"
-				},
-				"description": ""
-			},
-			"response": []
-		},
-		{
-			"name": "Get User ID 1",
-			"request": {
-				"url": "http://localhost:8080/api/user/id/1",
-				"method": "GET",
-				"header": [],
-				"body": {},
-				"description": ""
-			},
-			"response": []
-		},
-		{
-			"name": "Add to Cart",
-			"request": {
-				"url": "http://localhost:8080/api/cart/addToCart",
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"description": ""
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"username\": \"test\",\n\t\"itemId\": 1,\n\t\"quantity\": 1\n}"
-				},
-				"description": ""
-			},
-			"response": []
-		},
-		{
-			"name": "Submit Order",
-			"request": {
-				"url": "http://localhost:8080/api/order/submit/test",
-				"method": "POST",
-				"header": [],
-				"body": {},
-				"description": ""
-			},
-			"response": []
-		},
-		{
-			"name": "Get Item 1",
-			"request": {
-				"url": "http://localhost:8080/api/item/1",
-				"method": "GET",
-				"header": [],
-				"body": {},
-				"description": ""
-			},
-			"response": []
-		},
-		{
-			"name": "Get Order History",
-			"request": {
-				"url": "http://localhost:8080/api/order/history/test",
-				"method": "GET",
-				"header": [],
-				"body": {},
-				"description": ""
-			},
-			"response": []
-		}
-	]
+  "variables": [],
+  "info": {
+    "name": "Udacity.eCommerce",
+    "_postman_id": "0161f788-f45a-9c73-4f4c-427b01a5a054",
+    "description": "",
+    "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Create User",
+      "request": {
+        "url": "http://localhost:8080/api/user/create",
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\"username\":\"test\"\n}"
+        },
+        "description": ""
+      },
+      "response": []
+    },
+    {
+      "name": "Get User ID 1",
+      "request": {
+        "url": "http://localhost:8080/api/user/id/1",
+        "method": "GET",
+        "header": [],
+        "body": {},
+        "description": ""
+      },
+      "response": []
+    },
+    {
+      "name": "Add to Cart",
+      "request": {
+        "url": "http://localhost:8080/api/cart/addToCart",
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"username\": \"test\",\n\t\"itemId\": 1,\n\t\"quantity\": 1\n}"
+        },
+        "description": ""
+      },
+      "response": []
+    },
+    {
+      "name": "Submit Order",
+      "request": {
+        "url": "http://localhost:8080/api/order/submit/test",
+        "method": "POST",
+        "header": [],
+        "body": {},
+        "description": ""
+      },
+      "response": []
+    },
+    {
+      "name": "Get Item 1",
+      "request": {
+        "url": "http://localhost:8080/api/item/1",
+        "method": "GET",
+        "header": [],
+        "body": {},
+        "description": ""
+      },
+      "response": []
+    },
+    {
+      "name": "Get Order History",
+      "request": {
+        "url": "http://localhost:8080/api/order/history/test",
+        "method": "GET",
+        "header": [],
+        "body": {},
+        "description": ""
+      },
+      "response": []
+    }
+  ]
 }
