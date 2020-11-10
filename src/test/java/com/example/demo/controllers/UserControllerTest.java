@@ -10,6 +10,8 @@ import org.junit.Test;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.Optional;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
@@ -30,7 +32,45 @@ public class UserControllerTest {
     }
 
     @Test
-    public void createUser() throws Exception {
+    public void findById() {
+        Long id = 1L;
+        User user = new User();
+        user.setUsername("test");
+        user.setPassword("testPassword");
+        user.setId(id);
+
+        when(userRepository.findById(id)).thenReturn(Optional.of(user));
+
+        ResponseEntity<User> response = userController.findById(id);
+        assertNotNull(response);
+        assertEquals(200, response.getStatusCodeValue());
+
+        User returnedUser = response.getBody();
+        assertEquals("test", returnedUser.getUsername());
+        assertEquals("testPassword", returnedUser.getPassword());
+    }
+
+    @Test
+    public void findByUsername() {
+        String username = "test";
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword("testPassword");
+        user.setId(1L);
+
+        when(userRepository.findByUsername(username)).thenReturn(user);
+
+        ResponseEntity<User> response = userController.findByUserName(username);
+        assertNotNull(response);
+        assertEquals(200, response.getStatusCodeValue());
+
+        User returnedUser = response.getBody();
+        assertEquals("test", returnedUser.getUsername());
+        assertEquals("testPassword", returnedUser.getPassword());
+    }
+
+    @Test
+    public void createUser() {
         when(bCryptPasswordEncoder.encode("testPassword")).thenReturn("thisIsHashed");
         CreateUserRequest createUserRequest = new CreateUserRequest();
         createUserRequest.setUsername("test");
