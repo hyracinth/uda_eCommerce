@@ -39,7 +39,7 @@ public class OrderController {
 			log.error("Could not find user by username: {}", username);
 			return ResponseEntity.notFound().build();
 		}
-		UserOrder order = UserOrder.createFromCart(user.getCart());
+		UserOrder order = createFromCartWrapper(user.getCart());
 		orderRepository.save(order);
 		log.debug("Order submitted for username: {}", username);
 		return ResponseEntity.ok(order);
@@ -55,5 +55,9 @@ public class OrderController {
 		}
 		log.debug("Order history returned for username: {}", username);
 		return ResponseEntity.ok(orderRepository.findByUser(user));
+	}
+
+	public UserOrder createFromCartWrapper(Cart cart) {
+		return UserOrder.createFromCart(cart);
 	}
 }

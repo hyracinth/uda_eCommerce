@@ -9,8 +9,9 @@ import com.example.demo.model.persistence.repositories.OrderRepository;
 import com.example.demo.model.persistence.repositories.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.springframework.http.ResponseEntity;
-
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -18,17 +19,20 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class OrderControllerTest {
     private OrderController orderController;
     private UserRepository userRepository = mock(UserRepository.class);
     private OrderRepository orderRepository = mock(OrderRepository.class);
 
+    @Spy
+    private OrderController orderControllerSpy;
+
     @Before
     public void setup() {
         orderController = new OrderController();
+        orderControllerSpy = Mockito.spy(orderController);
         TestUtils.injectObjects(orderController, "userRepository", userRepository);
         TestUtils.injectObjects(orderController, "orderRepository", orderRepository);
     }
@@ -62,8 +66,8 @@ public class OrderControllerTest {
         order.setItems(listItems);
         order.setTotal(BigDecimal.ONE);
 
+        doReturn(order).when(orderControllerSpy).createFromCartWrapper(cart);
         when(userRepository.findByUsername("test")).thenReturn(user);
-        when(UserOrder.createFromCart(cart)).thenReturn(order);
         when(orderRepository.save(order)).thenReturn(order);
 
         ResponseEntity<UserOrder> response = orderController.submit("test");
