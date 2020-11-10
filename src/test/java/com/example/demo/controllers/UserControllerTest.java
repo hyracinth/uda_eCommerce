@@ -69,6 +69,22 @@ public class UserControllerTest {
         assertEquals("testPassword", returnedUser.getPassword());
     }
 
+
+    @Test
+    public void findByUsernameFail() {
+        String username = "test";
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword("testPassword");
+        user.setId(1L);
+
+        when(userRepository.findByUsername(username)).thenReturn(user);
+
+        ResponseEntity<User> response = userController.findByUserName(username + 2);
+        assertNotNull(response);
+        assertEquals(404, response.getStatusCodeValue());
+    }
+
     @Test
     public void createUser() {
         when(bCryptPasswordEncoder.encode("testPassword")).thenReturn("thisIsHashed");
@@ -89,5 +105,17 @@ public class UserControllerTest {
         assertEquals("thisIsHashed", user.getPassword());
     }
 
+    @Test
+    public void createUserFail() {
+        when(bCryptPasswordEncoder.encode("testPassword")).thenReturn("thisIsHashed");
+        CreateUserRequest createUserRequest = new CreateUserRequest();
+        createUserRequest.setUsername("test");
+        createUserRequest.setPassword("test");
+        createUserRequest.setConfirmPassword("test");
 
+        final ResponseEntity<User> response = userController.createUser(createUserRequest);
+
+        assertNotNull(response);
+        assertEquals(400, response.getStatusCodeValue());
+    }
 }
